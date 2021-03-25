@@ -1,0 +1,48 @@
+#!/bin/bash
+
+set -e
+set -x
+shopt -s dotglob
+
+
+# Required to install `ffi` separately due to an installation issue with ffi v-1.9.21
+# echo "---> Installing ffi ..."
+# gem install ffi --version 1.9.18
+# # Required to install `asciidoctor-diagram` separately due to a "undefined method `enable_dsl'" error with asciidoctor-diagram v-1.5.17
+# echo "---> Installing asciidoctor-diagram ..."
+# gem install asciidoctor-diagram --version 1.5.16
+# `gem install` is required because `bundle install` does not properly place `asciibinder` into $PATH
+# echo "---> Installing AsciiBinder ..."
+# # gem install ascii_binder --version 0.1.15.1
+# gem install ascii_binder
+
+REPO="${REPO:-https://github.com/openshift/openshift-docs.git}"
+
+echo "---> Cloning docs repo"
+# Clone OpenShift Docs into current directory
+git clone --depth 1 $REPO docs
+cd docs
+# it's necessary to enforce a * ref so that all branches are referenced
+sed -i 's%fetch = +refs.*%fetch = +refs/heads/*:refs/remotes/origin/*%' .git/config
+git fetch --all --quiet
+for remote in $(cat _distro_map.yml | yq eval ".*.branches | keys | .[]" - | sort | uniq)
+do
+    git checkout $remote 2>/dev/null || git checkout --force --track remotes/origin/$remote
+done
+
+# AsciiBinder uses git to some extent and requires `user.email` to be properly set
+git config user.email "devel@openshift.com"
+
+source ${HTTPD_CONTAINER_SCRIPTS_PATH}/common.sh
+
+echo "---> Enabling s2i support in httpd24 image"
+
+config_s2i
+
+# Fix source directory permissions
+fix-permissions ./
+
+process_extending_files ${HTTPD_APP_ROOT}/src/httpd-post-assemble/ ${HTTPD_CONTAINER_SCRIPTS_PATH}/post-assemble/
+
+# Fix source directory permissions
+fix-permissions ./
