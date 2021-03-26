@@ -4,27 +4,6 @@ PACKAGE="${PACKAGE:-commercial}"
 
 cd docs
 
-if [ "$PACKAGE" = "community" ]
-then
-    git checkout enterprise-3.11
-    echo "---> Installing Minishift content ..."
-    mkdir minishift
-    cd minishift
-    if wget http://minishift.io/minishift-adoc.tar
-    then
-        tar -xvf minishift-adoc.tar --strip 1
-        cat _topic_map.yml >> ../_topic_map.yml
-        rm minishift-adoc.tar
-        cd ..
-        git add minishift/
-        git commit -am "Minishift build-time commit"
-    else
-        echo "WARNING: Could not retrieve minishift-adoc.tar"
-        cd ..
-        rmdir minishift
-    fi
-fi
-
 
 echo "---> Packaging $PACKAGE docs content"
 git checkout master
