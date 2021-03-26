@@ -216,7 +216,7 @@ parameters:
     displayName: "Readiness Delay Seconds"
     description: "The number of seconds to wait for the pod to become ready (10m default)"
     required: true
-    value: "600"
+    value: "1200"
 
   - name: "SOURCE_REPO"
     displayName: "Git Repository URL for the build scripts"
