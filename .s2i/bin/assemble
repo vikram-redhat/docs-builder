@@ -18,6 +18,10 @@ shopt -s dotglob
 
 REPO="${REPO:-https://github.com/openshift/openshift-docs.git}"
 
+git config user.email "vigoyal@redhat.com"
+export GIT_COMMITTER_NAME=’vikram-redhat’
+export GIT_COMMITTER_EMAIL=’vigoyal@redhat.com’
+
 echo "---> Cloning docs repo"
 # Clone OpenShift Docs into current directory
 git clone --depth 1 $REPO docs
@@ -31,7 +35,9 @@ do
 done
 
 # AsciiBinder uses git to some extent and requires `user.email` to be properly set
-git config user.email "devel@openshift.com"
+git config user.email "vigoyal@redhat.com"
+export GIT_COMMITTER_NAME=’vikram-redhat’
+export GIT_COMMITTER_EMAIL=’vigoyal@redhat.com’
 
 source ${HTTPD_CONTAINER_SCRIPTS_PATH}/common.sh
 
