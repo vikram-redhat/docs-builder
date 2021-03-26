@@ -23,7 +23,7 @@ export GIT_COMMITTER_EMAIL="vigoyal@redhat.com"
 
 echo "---> Cloning docs repo"
 # Clone OpenShift Docs into current directory
-git clone --depth 1 $REPO docs
+git clone -c user.name=vikram-redhat -c user.email=vigoyal@redhat.com --depth 1 $REPO docs
 cd docs
 # it's necessary to enforce a * ref so that all branches are referenced
 sed -i 's%fetch = +refs.*%fetch = +refs/heads/*:refs/remotes/origin/*%' .git/config
