@@ -33,10 +33,6 @@ do
     git checkout $remote 2>/dev/null || git checkout --force --track remotes/origin/$remote
 done
 
-# AsciiBinder uses git to some extent and requires `user.email` to be properly set
-git config user.email "vigoyal@redhat.com"
-export GIT_COMMITTER_NAME=’vikram-redhat’
-export GIT_COMMITTER_EMAIL=’vigoyal@redhat.com’
 
 source ${HTTPD_CONTAINER_SCRIPTS_PATH}/common.sh
 
