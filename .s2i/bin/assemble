@@ -18,7 +18,6 @@ shopt -s dotglob
 
 REPO="${REPO:-https://github.com/openshift/openshift-docs.git}"
 
-git config user.email "vigoyal@redhat.com"
 export GIT_COMMITTER_NAME=’vikram-redhat’
 export GIT_COMMITTER_EMAIL=’vigoyal@redhat.com’
 
